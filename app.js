@@ -19,9 +19,13 @@ app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 //app.use(cookieParser());
 app.use(bodyParser.json({
+  type: '*/*',
+  limit: '50mb',
   verify: (req, res, buf) => {
-    console.log('buf', buf);
-    req.rawBody = buf.toString('utf8');
+    if (req.url.startsWith('/callbacks')) {
+      console.log('buf', buf);
+      req.rawBody = buf.toString('utf8');
+    }
   }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
